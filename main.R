@@ -14,9 +14,9 @@ print("Helicopter money simulation")
 ## Steps in simulation
 number_of_steps <- 25
 
-## Evolving data lists
-output_gap_percent_list <- c(1:number_of_steps+1)
+## Evolving data listsC
 inflation_percent_list <- c(1: number_of_steps+1)
+output_gap_percent_list <- c(1:number_of_steps+1)
 nominal_interest_rate_list <- c(1:number_of_steps+1)
 neutral_rate_list <- c(1: number_of_steps+1)
 real_rate_list <- c(1:number_of_steps+1)
@@ -37,7 +37,7 @@ nominal_interest_rate_list[1] <- 0
 base_GDP_list[1] <- 0.2
 dept_GDP_list[1] <- 0.79
 omo_GDP_list[1] <- 0.0
-omo_GDP_list[1] <- 1.0
+P_t_list[1] <- 1.0
 
 ## Constants
 alpha_param <- 0.2
@@ -67,7 +67,7 @@ for (step_i in c(2:(number_of_steps+1))) {
   nominal_rate_t_minus_1 <- nominal_interest_rate_list[step_i-1]
   real_rate_t_minus_1 <- nominal_rate_t_minus_1 - inflation_t_minus_1 
   omo_GDP_t_minus_1 <- omo_GDP_list[step_i-1]
-  base_GDP_t_minus_1 <- base_GDP_list[step_i-1]
+  base_GDP_t_minus_1 <- base_GDP_list[step_i-1] / (1+g_param)^(step_i -2)
   dept_t_minus_1 <- dept_GDP_list[step_i - 1]
   P_t_minus_1 <- P_t_list[step_i - 1]
   
@@ -82,7 +82,7 @@ for (step_i in c(2:(number_of_steps+1))) {
   inflation_t <- Inflation(inflation_t_minus_1, alpha_param, output_gap_Y_t_minus_1)
   
   ## Price level
-  P_t <- P_t_minus_1*(1+inflation_t)
+  P_t <- P_t_minus_1 + log(1+inflation_t)
   
   ## Baseline policy
   ## A. Monetary policy
@@ -93,14 +93,14 @@ for (step_i in c(2:(number_of_steps+1))) {
   
   if(nominal_rate_t > 0) { ## End of page 94
     ## Money demand determines M
-    base_GDP_t <- BasePerGDP(P_t, nominal_rate_t, k_param, gamma_param)
+    base_GDP_t <- -BasePerGDP(P_t, nominal_rate_t, k_param, gamma_param)
     
     ## Lagged M determine open market purchases Z
     omo_GDP_t <- base_GDP_t - base_GDP_t_minus_1
     
   }
   else{ ## Case of i_t == 0
-    base_GDP_t <- base_GDP_t_minus_1
+    base_GDP_t <- base_GDP_t_minus_1 
     omo_GDP_t <- omo_GDP_t_minus_1
   }
   
@@ -113,17 +113,17 @@ for (step_i in c(2:(number_of_steps+1))) {
   omo_GDP_list[step_i] <- omo_GDP_t 
   base_GDP_list[step_i] <- base_GDP_t
   dept_GDP_list[step_i] <- dept_t
-  
+  P_t_list[step_i] <- P_t
   print("Iteration :")
   print(step_i)
 }
 
 print("End of simulation")
 
-par(mfrow=c(2,3))
-plot(output_gap_percent_list)
-plot(inflation_percent_list)
-plot(nominal_interest_rate_list)
-plot(omo_GDP_list)
-plot(base_GDP_list)
-plot(dept_GDP_list)
+par(mfrow=c(3,2))
+plot(output_gap_percent_list,type="l")
+plot(inflation_percent_list,type="l")
+plot(nominal_interest_rate_list,type="l")
+plot(omo_GDP_list,type="l")
+plot(base_GDP_list,type="l")
+plot(dept_GDP_list,type="l")
