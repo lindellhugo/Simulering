@@ -131,7 +131,7 @@ BondFinanced <- function() {
         }
 
         G_t_star <- (output_Y_star / delta_param * ((beta_param * (real_rate_t - neutral_rate_t))
-            - gamma_param * output_gap_Y_t))
+            - lambda_param * output_gap_Y_t))
 
         G_t <- max(G_t_star, 0)
 

@@ -119,12 +119,14 @@ Helicopter <- function() {
         
 
         G_t_star <- (output_Y_star / delta_param * ((beta_param * (real_rate_t - neutral_rate_t))
-            - gamma_param * output_gap_Y_t))
+            - lambda_param * output_gap_Y_t))
 
         G_t <- max(G_t_star, 0)
 
-
-        if (nominal_rate_t > 0) {
+        if (G_t > 0) {
+            omo_t <- G_t * P_t
+            monetary_base_t <- monetary_base_t_minus_1 + omo_t
+        } else if (nominal_rate_t > 0) {
             ## End of page 94
             ## Money demand determines M
             monetary_base_t <- (output_Y_t * P_t * exp(k_param - gamma_param * nominal_rate_t))
@@ -137,7 +139,7 @@ Helicopter <- function() {
             monetary_base_t <- monetary_base_t_minus_1
             omo_t <- omo_t_minus_1
         }
-        omo_t = omo_t + P_t * G_t
+        
         ## The dept in the economy
         dept_t = (dept_t_minus_1 * (1.0 + nominal_rate_t_minus_1) +
               P_t * G_t - omo_t -
