@@ -1,11 +1,11 @@
 source("NeutralRate.R")
 
-BaseLinePolicy <- function() {
+BaseLinePolicy <- function(parameters) {
 
     print("Baseline policy")
 
     ## Steps in simulation
-    number_of_steps <- 25
+    number_of_steps <- parameters$number_of_steps
 
     ## Evolving data lists
     inflation_percent_list <- c(1:number_of_steps + 1)
@@ -30,40 +30,39 @@ BaseLinePolicy <- function() {
     ## Initial values
 
     ## Evolves
-    inflation_percent_list[1] <- -1.0 / 100
-    output_gap_percent_list[1] <- -7.5 / 100
+    inflation_percent_list[1] <- parameters$inflation_percent_gap
+    output_gap_percent_list[1] <- parameters$output_gap_percent_gap
     output_Y_list[1] <- 1.0 + output_gap_percent_list[1]
-    nominal_interest_rate_list[1] <- 0
-    monetary_base_list[1] <- 0.2 * output_Y_list[1]
+    nominal_interest_rate_list[1] <- parameters$nominal_interest_rate
+    monetary_base_list[1] <- parameters$monetary_base_per_gdp * output_Y_list[1]
     omo_list <- c(1:number_of_steps + 1)
     omo_per_gdp_list <- c(1:number_of_steps + 1)
     P_t_list <- c(1:number_of_steps + 1)
     step_list <- c(1:number_of_steps + 1)
-    dept_list[1] <- 0.79 * output_Y_list[1]
-    omo_list[1] <- 0.0
-    omo_per_gdp_list[1] <- 0.0
+    dept_list[1] <- parameters$dept_per_gdp * output_Y_list[1]
+    omo_list[1] <- output_Y_list[1] * parameters$omo_per_gdp
+    omo_per_gdp_list[1] <- parameters$omo_per_gdp
     P_t_list[1] <- 1.0
     dept_per_gdp_list[1] <- dept_list[1] / output_Y_list[1]
     monetary_base_per_gdp_list[1] <- monetary_base_list[1] / output_Y_list[1]
 
     ## Constants
-    alpha_param <- 0.2
-    beta_param <- 1.0
-    delta_param <- 1.25 ## Kuttner and Posen 2001
-    gamma_param <- 0.1
-    lambda_param <- 0.6
-    theta_param <- 0.25
-    k_param <- log(0.1)
-    g_param <- 0.02
-    inflation_target = 0.02
-
+    alpha_param <- parameters$alpha_param
+    beta_param <- parameters$beta_param
+    delta_param <- parameters$delta_param 
+    gamma_param <- parameters$gamma_param
+    lambda_param <- parameters$lambda_param
+    theta_param <- parameters$theta_param
+    k_param <- parameters$k_param
+    g_param <- parameters$g_param
+    inflation_target = parameters$inflation_target
 
     output_Y_star_list = (1 + g_param) ^ c(0:number_of_steps + 1)
 
     ## Policy values
     G_t <- 0 ## Always zero in base scenario
-    a_param = 1.1
-    b_param = 2.5
+    a_param = parameters$a_param
+    b_param = parameters$b_param
 
 
     ## Below, the base scenario is coded:
@@ -103,7 +102,7 @@ BaseLinePolicy <- function() {
         inflation_t <- inflation_expt_t + alpha_param * output_gap_Y_t_minus_1
 
         ## Price level
-        P_t <- P_t_minus_1 * (1 + inflation_t)
+        P_t <- P_t_minus_1 *  (1 + inflation_t)
 
 
         ## Baseline policy
@@ -124,7 +123,7 @@ BaseLinePolicy <- function() {
         }
         else {
             ## Case of i_t == 0
-            monetary_base_t <- monetary_base_t_minus_1
+            monetary_base_t <- monetary_base_t_minus_1 
             omo_t <- omo_t_minus_1
         }
 

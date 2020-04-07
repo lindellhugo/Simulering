@@ -1,19 +1,27 @@
 source("SimulationBaseLinePolicy.R")
 source("SimulationBondFinanced.R")
 source("SimulationHelicopter.R")
+source("JapaneseParameters.R")
 
 simulation <- "all" ## "baseline", "bond", "helicopter"
+simulation_parameters <- "Japanese"
+
+if (simulation_parameters == "Japanese") {
+    ## Parameters to use in all simulations
+    parameters <- JapaneseParameters()
+}
+
 
 if ("bond" == simulation) {
-    BondFinanced()
+    BondFinanced(parameters)
 }else if ("baseline" == simulation) {
-    BaseLinePolicy()
+    BaseLinePolicy(parameters)
 }else if ("helicopter" == simulation) {
-    Helicopter()
+    Helicopter(parameters)
 } else {
-    result_baseline <- BaseLinePolicy()
-    result_bond <- BondFinanced()
-    result_helicopter <- Helicopter()
+    result_baseline <- BaseLinePolicy(parameters)
+    result_bond <- BondFinanced(parameters)
+    result_helicopter <- Helicopter(parameters)
     plot(result_baseline[[1]],type="l", col="red", main="Output/GDP")
     lines(result_bond[[1]])
     lines(result_helicopter[[1]], col = "green", lty = 2)
