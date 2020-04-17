@@ -110,7 +110,7 @@ Helicopter <- function(parameters) {
         neutral_rate_t <- NeutralRate(step_i)
         ## The rate is set as
         i_t_T <- (neutral_rate_t + inflation_t + a_param * output_gap_Y_t + b_param * (inflation_t - inflation_target))
-        nominal_rate_t <- max(i_t_T, 0)
+        nominal_rate_t <- max(i_t_T, parameters$minRate)
         real_rate_t <- nominal_rate_t - inflation_t
         ##browser()
 

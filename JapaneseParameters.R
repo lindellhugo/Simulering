@@ -19,7 +19,8 @@ JapaneseParameters <- function() {
         omo_per_gdp = 0.0,
         P_t = 1.0,
         a_param = 1.1,
-        b_param = 2.5
+        b_param = 2.5,
+        minRate = 0
         )
     return(japanese_parameters)
 }

@@ -110,13 +110,13 @@ BaseLinePolicy <- function(parameters) {
         neutral_rate_t <- NeutralRate(step_i)
         ## The rate is set as
         i_t_T <- (neutral_rate_t + inflation_t + a_param * output_gap_Y_t + b_param * (inflation_t - inflation_target))
-        nominal_rate_t <- max(i_t_T, 0)
+        nominal_rate_t <- max(i_t_T, parameters$minRate)
         ##browser()
 
         if (nominal_rate_t > 0) {
             ## End of page 94
             ## Money demand determines M
-            monetary_base_t <- (output_Y_t * P_t * exp(k_param - gamma_param * nominal_rate_t))
+            monetary_base_t <- (output_Y_t * P_t * exp(k_param - gamma_param * (nominal_rate_t)))
             #monetary_base_t <- 
             ## Lagged M determine open market purchases Z
             omo_t <- (monetary_base_t - monetary_base_t_minus_1)
