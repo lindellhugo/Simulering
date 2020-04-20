@@ -1,13 +1,14 @@
-source("SimulationBaseLinePolicy.R")
-source("SimulationBondFinanced.R")
-source("SimulationHelicopter.R")
+source("PlotData.R")
+source("BaseModel.R")
+source("BaselineScenario.R")
+source("BondFinancedScenario.R")
+source("HelicopterScenario.R")
 source("JapaneseParameters.R")
 source("SwedishParameters.R")
 
-simulation <- "all" ## "baseline", "bond", "helicopter"
-simulation_parameters <- "Swedish"
+simulation_parameters <- "Japanese"
 
-if (simulation_parameters == "Japanese") {
+if (simulation_parameters == "Swedish") {
      parameters <- SwedishParameters()
 } else {
     ## Parameters to use in all simulations
@@ -15,32 +16,12 @@ if (simulation_parameters == "Japanese") {
 }
 
 
-if ("bond" == simulation) {
-    BondFinanced(parameters)
-}else if ("baseline" == simulation) {
-    BaseLinePolicy(parameters)
-}else if ("helicopter" == simulation) {
-    Helicopter(parameters)
-} else {
-    result_baseline <- BaseLinePolicy(parameters)
-    result_bond <- BondFinanced(parameters)
-    result_helicopter <- Helicopter(parameters)
-    plot(result_baseline[[1]],type="l", col="red", main="Output/GDP")
-    lines(result_bond[[1]])
-    lines(result_helicopter[[1]], col = "green", lty = 2)
-    plot(result_baseline[[2]], type = "l", col = "red", main = "Inflation")
-    lines(result_bond[[2]])
-    lines(result_helicopter[[2]], col = "green", lty = 2)
-    plot(result_baseline[[3]], type = "l", col = "red", main = "Nominal interest rate")
-    lines(result_bond[[3]])
-    lines(result_helicopter[[3]], col = "green", lty = 2)
-    plot(result_baseline[[4]],  type = "l", col = "red", main = "OMO/GDP")
-    lines(result_bond[[4]])
-    lines(result_helicopter[[4]], col = "green", lty = 2)
-    plot(result_baseline[[5]], type = "l", col = "red", main = "Monetary base/GDP")
-    lines(result_bond[[5]])
-    lines(result_helicopter[[5]], col = "green", lty = 2)
-    plot(result_baseline[[6]], type = "l", col = "red", main = "Dept/GDP")
-    lines(result_bond[[6]])
-    lines(result_helicopter[[6]], col = "green", lty = 2)
-}
+result_baseline <- BaseModel(parameters, BaselineScenario)
+result_bond <- BaseModel(parameters, BondFinancedScenario)
+result_helicopter <- BaseModel(parameters, HelicopterScenario)
+PlotData(result_baseline[[1]], result_bond[[1]], result_helicopter[[1]], "Output/GDP", parameters$legend_pos)
+PlotData(result_baseline[[2]], result_bond[[2]], result_helicopter[[2]], "Inflation")
+PlotData(result_baseline[[3]], result_bond[[3]], result_helicopter[[3]], "Nominal interest rate")
+PlotData(result_baseline[[4]], result_bond[[4]], result_helicopter[[4]], "OMO/GDP")
+PlotData(result_baseline[[5]], result_bond[[5]], result_helicopter[[5]], "Monetary base/GDP")
+PlotData(result_baseline[[6]], result_bond[[6]], result_helicopter[[6]], "Dept/GDP")

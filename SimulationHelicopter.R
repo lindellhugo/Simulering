@@ -102,7 +102,7 @@ Helicopter <- function(parameters) {
         inflation_t <- inflation_expt_t + alpha_param * output_gap_Y_t_minus_1
 
         ## Price level
-        P_t <- P_t_minus_1 * (1 + inflation_t)
+        P_t <- P_t_minus_1 * (1 + inflation_t_minus_1)
 
 
         ## Baseline policy

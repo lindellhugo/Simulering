@@ -102,7 +102,7 @@ BaseLinePolicy <- function(parameters) {
         inflation_t <- inflation_expt_t + alpha_param * output_gap_Y_t_minus_1
 
         ## Price level
-        P_t <- P_t_minus_1 *  (1 + inflation_t)
+        P_t <- P_t_minus_1 *  (1 + inflation_t_minus_1)
 
 
         ## Baseline policy
@@ -111,9 +111,10 @@ BaseLinePolicy <- function(parameters) {
         ## The rate is set as
         i_t_T <- (neutral_rate_t + inflation_t + a_param * output_gap_Y_t + b_param * (inflation_t - inflation_target))
         nominal_rate_t <- max(i_t_T, parameters$minRate)
-        ##browser()
+		real_rate_t <- nominal_rate_t - inflation_t
 
-        if (nominal_rate_t > 0) {
+		
+        if (i_t_T > 0) {
             ## End of page 94
             ## Money demand determines M
             monetary_base_t <- (output_Y_t * P_t * exp(k_param - gamma_param * (nominal_rate_t)))
@@ -145,6 +146,7 @@ BaseLinePolicy <- function(parameters) {
         dept_list[step_i] <- dept_t
         dept_per_gdp_list[step_i] <- dept_t / P_t / output_Y_t
         P_t_list[step_i] <- P_t
+		G_t_list[step_i] <- G_t 					   
         print("Iteration :")
         print(step_i)
     }

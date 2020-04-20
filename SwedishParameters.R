@@ -1,7 +1,7 @@
 
 SwedishParameters <- function() {
     swedish_parameters <- list(
-        number_of_steps = 25,
+        number_of_steps = 15,
         alpha_param = 0.3, ## Philips kurvan
         beta_param = 1.0, ##
         delta_param = 1.3, ## Kuttner and Posen 2001
@@ -20,7 +20,8 @@ SwedishParameters <- function() {
         P_t = 1.0,
         a_param = 0.1, # Output parameter
         b_param = 1.5, # Inflation parameter
-        minRate = -0.5 /100
+        minRate = -0.5 / 100,
+        legend_pos = "topleft"
         )
     return(swedish_parameters)
 }

@@ -20,7 +20,8 @@ JapaneseParameters <- function() {
         P_t = 1.0,
         a_param = 1.1,
         b_param = 2.5,
-        minRate = 0
+        minRate = 0,
+        legend_pos = "bottomright"
         )
     return(japanese_parameters)
 }

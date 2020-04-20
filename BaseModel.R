@@ -1,8 +1,8 @@
-BondFinanced <- function(parameters) {
-    print("Bond financed fiscal expansion")
-    source("NeutralRate.R")
+source("NeutralRate.R")
 
+BaseModel <- function(parameters, scenario) {
 
+    print("BaseModel")
 
     ## Steps in simulation
     number_of_steps <- parameters$number_of_steps
@@ -64,6 +64,7 @@ BondFinanced <- function(parameters) {
     a_param = parameters$a_param
     b_param = parameters$b_param
 
+
     ## Below, the base scenario is coded:
     for (step_i in c(2:(number_of_steps + 1))) {
 
@@ -82,7 +83,7 @@ BondFinanced <- function(parameters) {
         monetary_base_t_minus_1 <- monetary_base_list[step_i - 1]
         dept_t_minus_1 <- dept_list[step_i - 1]
         P_t_minus_1 <- P_t_list[step_i - 1]
-        G_t_minus_1 <- G_t_list[step_i-1]
+        G_t_minus_1 <- G_t_list[step_i - 1]
 
         ## Update values for current interation
 
@@ -104,34 +105,34 @@ BondFinanced <- function(parameters) {
         ## Price level
         P_t <- P_t_minus_1 * (1 + inflation_t_minus_1)
 
-
-        ## Baseline policy
-        ## A. Monetary policy
+        ## Neutral rate
         neutral_rate_t <- NeutralRate(step_i)
-        ## The rate is set as
+
+        ## The rate is set using a Taylor rule
         i_t_T <- (neutral_rate_t + inflation_t + a_param * output_gap_Y_t + b_param * (inflation_t - inflation_target))
         nominal_rate_t <- max(i_t_T, parameters$minRate)
         real_rate_t <- nominal_rate_t - inflation_t
-        ##browser()
 
-        if (i_t_T > parameters$minRate) {
-            ## End of page 94
-            ## Money demand determines M
-            monetary_base_t <- (output_Y_t * P_t * exp(k_param - gamma_param * nominal_rate_t))
-            #monetary_base_t <- 
-            ## Lagged M determine open market purchases Z
-            omo_t <- (monetary_base_t - monetary_base_t_minus_1)
-        }
-        else {
-            ## Case of i_t == 0
-            monetary_base_t <- monetary_base_t_minus_1
-            omo_t <- omo_t_minus_1
-        }
+        ## Save the current economic state
+        economic_state <- list(
+            i_t_T = i_t_T,
+            nominal_rate_t = nominal_rate_t,
+            neutral_rate_t = neutral_rate_t,
+            real_rate_t = real_rate_t,
+            inflation_t = inflation_t,
+            output_Y_t = output_Y_t,
+            output_gap_Y_t = output_gap_Y_t,
+            output_Y_star = output_Y_star,
+            inflation_t = inflation_t,
+            P_t = P_t,
+            monetary_base_t_minus_1 = monetary_base_t_minus_1,
+            omo_t_minus_1 = omo_t_minus_1
+        )
 
-        G_t_star <- (output_Y_star / delta_param * ((beta_param * (real_rate_t - neutral_rate_t))
-            - lambda_param * output_gap_Y_t))
-
-        G_t <- max(G_t_star, 0)
+        scenarioResult <- scenario(economic_state, parameters)
+        G_t <- scenarioResult$G_t
+        monetary_base_t <- scenarioResult$monetary_base_t
+        omo_t <- scenarioResult$omo_t
 
         ## The dept in the economy
         dept_t = (dept_t_minus_1 * (1.0 + nominal_rate_t_minus_1) +
@@ -151,7 +152,7 @@ BondFinanced <- function(parameters) {
         dept_list[step_i] <- dept_t
         dept_per_gdp_list[step_i] <- dept_t / P_t / output_Y_t
         P_t_list[step_i] <- P_t
-        G_t_list[step_i] <- G_t 
+        G_t_list[step_i] <- G_t
         print("Iteration :")
         print(step_i)
     }
