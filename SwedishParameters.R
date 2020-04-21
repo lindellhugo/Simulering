@@ -13,7 +13,7 @@ SwedishParameters <- function() {
         inflation_target = 0.02, 
         inflation_percent_gap = 2.0 / 100,
         output_gap_percent_gap = -0.4 / 100,
-        nominal_interest_rate = 0,
+        nominal_interest_rate = -0.5 / 100,
         monetary_base_per_gdp = 0.72,
         dept_per_gdp = 0.48,
         omo_per_gdp = 0.0,

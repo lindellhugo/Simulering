@@ -107,32 +107,34 @@ BaseModel <- function(parameters, scenario) {
 
         ## Neutral rate
         neutral_rate_t <- NeutralRate(step_i)
-
-        ## The rate is set using a Taylor rule
-        i_t_T <- (neutral_rate_t + inflation_t + a_param * output_gap_Y_t + b_param * (inflation_t - inflation_target))
-        nominal_rate_t <- max(i_t_T, parameters$minRate)
-        real_rate_t <- nominal_rate_t - inflation_t
-
+        
         ## Save the current economic state
         economic_state <- list(
-            i_t_T = i_t_T,
-            nominal_rate_t = nominal_rate_t,
             neutral_rate_t = neutral_rate_t,
-            real_rate_t = real_rate_t,
-            inflation_t = inflation_t,
+            neutral_rate_t_minus_1 = neutral_rate_t_minus_1,
             output_Y_t = output_Y_t,
+            output_Y_t_minus_1 = output_Y_t_minus_1,
             output_gap_Y_t = output_gap_Y_t,
+            output_gap_Y_t_minus_1 = output_gap_Y_t_minus_1,            
             output_Y_star = output_Y_star,
+            output_Y_star_t_minus_1 = output_Y_star_t_minus_1,
             inflation_t = inflation_t,
+            inflation_t_minus_1 = inflation_t_minus_1,
             P_t = P_t,
+            P_t_minus_1 = P_t_minus_1,
+            G_t_minus_1 = G_t_minus_1,
             monetary_base_t_minus_1 = monetary_base_t_minus_1,
-            omo_t_minus_1 = omo_t_minus_1
+            omo_t_minus_1 = omo_t_minus_1,
+            nominal_rate_t_minus_1 = nominal_rate_t_minus_1,
+            real_rate_t_minus_1 = real_rate_t_minus_1
         )
 
         scenarioResult <- scenario(economic_state, parameters)
         G_t <- scenarioResult$G_t
         monetary_base_t <- scenarioResult$monetary_base_t
         omo_t <- scenarioResult$omo_t
+        nominal_rate_t <- scenarioResult$nominal_rate_t
+        real_rate_t <- scenarioResult$real_rate_t
 
         ## The dept in the economy
         dept_t = (dept_t_minus_1 * (1.0 + nominal_rate_t_minus_1) +
