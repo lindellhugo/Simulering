@@ -1,4 +1,4 @@
-
+source("NeutralRateJapan.R")
 JapaneseParameters <- function() {
     japanese_parameters <- list(
         number_of_steps = 25,
@@ -21,6 +21,7 @@ JapaneseParameters <- function() {
         a_param = 1.1,
         b_param = 2.5,
         minRate = 0,
+        neutralRate = NeutralRateJapan,
         legend_pos = "bottomright"
         )
     return(japanese_parameters)

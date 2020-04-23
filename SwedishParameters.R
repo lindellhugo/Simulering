@@ -1,4 +1,4 @@
-
+source("NeutralRateSweden.R")
 SwedishParameters <- function() {
     swedish_parameters <- list(
         number_of_steps = 15,
@@ -21,6 +21,7 @@ SwedishParameters <- function() {
         a_param = 0.1, # Output parameter
         b_param = 1.5, # Inflation parameter
         minRate = -0.5 / 100,
+        neutralRate = NeutralRateSweden,
         legend_pos = "topleft"
         )
     return(swedish_parameters)
