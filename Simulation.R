@@ -7,7 +7,7 @@ source("PermanentExpansionScenario.R")
 source("JapaneseParameters.R")
 source("SwedishParameters.R")
 
-simulation_parameters <- "Swedish"
+simulation_parameters <- "Japanese"
 
 if (simulation_parameters == "Swedish") {
      parameters <- SwedishParameters()

@@ -1,5 +1,3 @@
-source("NeutralRate.R")
-
 BaseModel <- function(parameters, scenario) {
 
     print("BaseModel")
