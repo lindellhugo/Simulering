@@ -6,8 +6,9 @@ source("HelicopterScenario.R")
 source("PermanentExpansionScenario.R")
 source("JapaneseParameters.R")
 source("SwedishParameters.R")
+source("RobustnessTest.R")
 
-simulation_parameters <- "Japanese"
+simulation_parameters <- "Swedish"
 
 if (simulation_parameters == "Swedish") {
      parameters <- SwedishParameters()
@@ -28,3 +29,5 @@ PlotData(result_baseline[[3]], result_bond[[3]], result_helicopter[[3]], result_
 PlotData(result_baseline[[4]], result_bond[[4]], result_helicopter[[4]], result_permanent[[4]], "OMO/GDP")
 PlotData(result_baseline[[5]], result_bond[[5]], result_helicopter[[5]], result_permanent[[5]], "Monetary base/GDP")
 PlotData(result_baseline[[6]], result_bond[[6]], result_helicopter[[6]], result_permanent[[6]], "Dept/GDP")
+
+RobustnessTest(parameters)

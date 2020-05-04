@@ -9,7 +9,7 @@ SwedishParameters <- function() {
         lambda_param = 0.9,
         theta_param = 0.45,
         k_param = log(0.66),
-        g_param = 0.02,
+        g_param = 0.0126,
         inflation_target = 0.02, 
         inflation_percent_gap = 2.0 / 100,
         output_gap_percent_gap = -0.4 / 100,
