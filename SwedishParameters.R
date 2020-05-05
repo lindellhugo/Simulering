@@ -10,7 +10,7 @@ SwedishParameters <- function() {
         theta_param = 0.45,
         k_param = log(0.66),
         g_param = 0.0126,
-        inflation_target = 0.02, 
+        inflation_target = 0.02,
         inflation_percent_gap = 2.0 / 100,
         output_gap_percent_gap = -0.4 / 100,
         nominal_interest_rate = -0.5 / 100,
@@ -18,7 +18,7 @@ SwedishParameters <- function() {
         dept_per_gdp = 0.48,
         omo_per_gdp = 0.0,
         P_t = 1.0,
-        a_param = 0.1, # Output parameter
+        a_param = 0.5, # Output parameter
         b_param = 1.5, # Inflation parameter
         minRate = -0.5 / 100,
         neutralRate = NeutralRateSweden,

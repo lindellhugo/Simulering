@@ -21,6 +21,7 @@ BaseModel <- function(parameters, scenario) {
     P_t_list <- c(1:number_of_steps + 1)
     step_list <- c(1:number_of_steps + 1)
     G_t_list <- c(1:number_of_steps + 1)
+    G_t_per_gdp_list <- c(1:number_of_steps + 1)
     neutral_rate_list <- c(1:number_of_steps + 1)
     real_rate_list <- c(1:number_of_steps + 1)
     omo_list <- c(1:number_of_steps + 1)
@@ -54,6 +55,7 @@ BaseModel <- function(parameters, scenario) {
     dept_per_gdp_list[1] <- dept_list[1] / output_Y_list[1]
     monetary_base_per_gdp_list[1] <- monetary_base_list[1] / output_Y_list[1]
     G_t_list[1] <- 0.0
+    G_t_per_gdp_list[1] <- 0.0
     state <- list(
         time_period = 1,
         output_gap_Y_t = output_gap_percent_list[1]
@@ -156,24 +158,18 @@ BaseModel <- function(parameters, scenario) {
         omo_list[step_i] <- omo_t
         omo_per_gdp_list[step_i] <- omo_t / P_t / output_Y_t
         monetary_base_list[step_i] <- monetary_base_t
-        monetary_base_per_gdp_list[step_i] = monetary_base_t / P_t / output_Y_t
+        monetary_base_per_gdp_list[step_i] = monetary_base_t  / output_Y_t / P_t
         dept_list[step_i] <- dept_t
-        dept_per_gdp_list[step_i] <- dept_t / P_t / output_Y_t
+        dept_per_gdp_list[step_i] <- dept_t  / output_Y_t / P_t
         P_t_list[step_i] <- P_t
         G_t_list[step_i] <- G_t
+        G_t_per_gdp_list[step_i] <- G_t / output_Y_t / P_t
         print("Iteration :")
         print(step_i)
     }
 
     print("End of simulation")
 
-    par(mfrow = c(3, 2))
-    plot(output_gap_percent_list, type = "l")
-    plot(inflation_percent_list, type = "l")
-    plot(nominal_interest_rate_list, type = "l")
-    plot(omo_per_gdp_list, type = "l")
-    plot(monetary_base_per_gdp_list, type = "l")
-    plot(dept_per_gdp_list, type = "l")
-    result <- list(output_gap_percent_list, inflation_percent_list, nominal_interest_rate_list, omo_per_gdp_list, monetary_base_per_gdp_list, dept_per_gdp_list)
+    result <- list(output_gap_percent_list, inflation_percent_list, nominal_interest_rate_list, omo_per_gdp_list, monetary_base_per_gdp_list, dept_per_gdp_list, G_t_per_gdp_list)
     return(result)
 }

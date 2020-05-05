@@ -23,7 +23,7 @@ HelicopterScenario <- function(economic_state, parameters) {
         ## Case of i_t == 0
         monetary_base_t <- economic_state$monetary_base_t_minus_1
         omo_t <- economic_state$omo_t_minus_1
-    }
+    }  
 
     policy <- list(
         monetary_base_t = monetary_base_t,

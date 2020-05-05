@@ -8,9 +8,9 @@ source("JapaneseParameters.R")
 source("SwedishParameters.R")
 
 # The parameters to investigate
-toTest = c("delta_param", "beta_param", "lambda_param")
+toTest = c("beta_param", "gamma_param", "k_param")
 
-Simulate <- function(parameters, new_value, p, comparaison_factor) {
+Simulate <- function(parameters, new_value, p, comparaison_factor, function_name = "") {
     new_parameters <- parameters
     new_parameters[[p]] = new_value
     result_baseline <- BaseModel(new_parameters, BaselineScenario)
@@ -22,7 +22,11 @@ Simulate <- function(parameters, new_value, p, comparaison_factor) {
             result_bond = result_bond,
             result_helicopter = result_helicopter
         )
-    row_label <- paste0(p, " = ", new_value)
+    if (is.function(new_value)) {
+        row_label <- paste0(p, " = ", function_name)
+    } else {
+        row_label <- paste0(p, " = ", new_value)
+    }
     row_data <- c(row_label,
                   tail(result_baseline[[comparaison_factor]], 1),
                   tail(result_bond[[comparaison_factor]], 1),
@@ -39,6 +43,7 @@ GetResultRow <- function(result) {
 GetDFRow <- function(value = c(), base = c(), bond = c(), helicopter = c()) {
     return(data.frame(Value = value, Baseline = base, Bond = bond, Helicopter = helicopter))
 }
+
 
 RobustnessTest <- function(parameters) {
 
@@ -57,19 +62,28 @@ RobustnessTest <- function(parameters) {
         double_result <- Simulate(parameters, double_value, p, comparaison_factor)
         main_table <- rbind(main_table, double_result)
     }
+
+    special_k <- Simulate(parameters, log(0.85*0.66), c("k_param"), comparaison_factor)
+    main_table <- rbind(main_table, special_k)
+    special_k <- Simulate(parameters, log(1.15*0.66), c("k_param"), comparaison_factor)
+    main_table <- rbind(main_table, special_k)
+    special_k <- Simulate(parameters, -0.234, c("k_param"), comparaison_factor)
+    main_table <- rbind(main_table, special_k)
     ## Special test case for the neutral rate
     # Original case:
     p_neutral_rate <- c("neutralRate")
     original_value <- parameters[[p_neutral_rate]]
-    original_result <- Simulate(parameters, original_value, p, comparaison_factor)
+    original_result <- Simulate(parameters, original_value, p_neutral_rate, comparaison_factor, "original (increasing)")
     main_table <- rbind(main_table, original_result)
 
-    # With fixed rate
-    fixed_rate_value <- function(state) {
-        return(0.02) # Adjust here to adjust level
+    for (rate in c(0.0, 0.01, 0.02)) {
+        # With fixed rate
+        fixed_rate_value <- function(state) {
+            return(rate) # Adjust here to adjust level
+        }
+        fixed_rate_result <- Simulate(parameters, fixed_rate_value, p_neutral_rate, comparaison_factor, paste0("fixed ", rate, "%"))
+        main_table <- rbind(main_table, fixed_rate_result)
     }
-    fixed_rate_result <- Simulate(parameters, fixed_rate_value, p_neutral_rate, comparaison_factor)
-    main_table <- rbind(main_table, fixed_rate_result)
 
     write.csv(main_table, "robustnessDeptGDP.csv", row.names = TRUE)
 
