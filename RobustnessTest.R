@@ -9,7 +9,12 @@ source("SwedishParameters.R")
 
 # The parameters to investigate
 toTest = c("beta_param", "gamma_param", "k_param")
-
+SimulateBaselineData <- function(parameters, new_value, p, comparaison_factor, function_name = "") {
+    new_parameters <- parameters
+    new_parameters[[p]] = new_value
+    result_baseline <- BaseModel(new_parameters, BaselineScenario)
+    return(result_baseline)
+}
 Simulate <- function(parameters, new_value, p, comparaison_factor, function_name = "") {
     new_parameters <- parameters
     new_parameters[[p]] = new_value
@@ -53,7 +58,7 @@ RobustnessTest <- function(parameters) {
 
     for (p in toTest) {
         original_value <- parameters[[p]]
-        double_value <- 2 * original_value
+        double_value <- 1.5 * original_value
         half_value <- 0.5 * original_value
         half_result <- Simulate(parameters, half_value, p, comparaison_factor)
         main_table <- rbind(main_table, half_result)
@@ -63,28 +68,71 @@ RobustnessTest <- function(parameters) {
         main_table <- rbind(main_table, double_result)
     }
 
-    special_k <- Simulate(parameters, log(0.85*0.66), c("k_param"), comparaison_factor)
-    main_table <- rbind(main_table, special_k)
-    special_k <- Simulate(parameters, log(1.15*0.66), c("k_param"), comparaison_factor)
-    main_table <- rbind(main_table, special_k)
-    special_k <- Simulate(parameters, -0.234, c("k_param"), comparaison_factor)
-    main_table <- rbind(main_table, special_k)
-    ## Special test case for the neutral rate
-    # Original case:
-    p_neutral_rate <- c("neutralRate")
-    original_value <- parameters[[p_neutral_rate]]
-    original_result <- Simulate(parameters, original_value, p_neutral_rate, comparaison_factor, "original (increasing)")
-    main_table <- rbind(main_table, original_result)
 
-    for (rate in c(0.0, 0.01, 0.02)) {
+    ## Special test case for the neutral rate
+    p_neutral_rate <- c("neutralRate")
+    for (rate in c(0.0, 0.01, 0.02, 0.03)) {
         # With fixed rate
         fixed_rate_value <- function(state) {
             return(rate) # Adjust here to adjust level
         }
-        fixed_rate_result <- Simulate(parameters, fixed_rate_value, p_neutral_rate, comparaison_factor, paste0("fixed ", rate, "%"))
+        fixed_rate_result <- Simulate(parameters, fixed_rate_value, p_neutral_rate, comparaison_factor, paste0("fixed ", 100 * rate, "%"))
         main_table <- rbind(main_table, fixed_rate_result)
     }
 
+    ## Special test case for the neutral rate
+    p_min_rate <- c("minRate")
+    zero_result <- Simulate(parameters, 0, p_min_rate, comparaison_factor)
+    zero_result_baseline <- SimulateBaselineData(parameters, 0, p_min_rate, comparaison_factor)
+    main_table <- rbind(main_table, zero_result)
+    original_result <- Simulate(parameters, -0.5 / 100, p_min_rate, comparaison_factor)
+    original_result_baseline <- SimulateBaselineData(parameters, -0.5 / 100, p_min_rate, comparaison_factor)
+    main_table <- rbind(main_table, original_result)
+    only_taylor_result <- Simulate(parameters, - Inf, p_min_rate, comparaison_factor)
+    only_taylor_result_baseline <- SimulateBaselineData(parameters, - Inf, p_min_rate, comparaison_factor)
+    main_table <- rbind(main_table, only_taylor_result)
+
     write.csv(main_table, "robustnessDeptGDP.csv", row.names = TRUE)
 
+    # Plotting when using different min rates
+    # Change to true to show the plot
+    if (FALSE) {
+        plot.new()
+        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Dept/GDP", "Transfers/GDP")
+        lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright")
+        usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+        texts <- c("0%", "-0.5%", "None") #, "Permanent")
+        par(mfrow = c(2, 3))
+        for (index in 1:7) {
+            if (index == 4 || index == 4 || index == 4) {
+                next
+            }
+            title <- titles[index]
+            pos <- lengendpos[index]
+            Plotting(zero_result_baseline[[index]], original_result_baseline[[index]], only_taylor_result_baseline[[index]], only_taylor_result[[index]], title, texts, "bottomleft", usePercent[index])
+        }
+    }
+
+    # Plotting when using different assumptions for monetary demand
+    # Change to true to show the plot
+    if (FALSE) {
+        # Plotting when using another monetary demand assumption
+        plot.new()
+        p_assumption <- c("fixed_monetary_demand_at_min_rate")
+        original_assumption_result <- SimulateBaselineData(parameters, TRUE, p_assumption, comparaison_factor)
+        without_assumption_result <- SimulateBaselineData(parameters, FALSE, p_assumption, comparaison_factor)
+
+        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Dept/GDP", "Transfers/GDP")
+        lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright")
+        usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+        texts <- c("With assumption", "Without assumption")
+        par(mfrow = c(2, 3))
+        for (index in 1:7) {
+            if (index != 4 ) {
+                title <- titles[index]
+                pos <- lengendpos[index]
+                Plotting(original_assumption_result[[index]], without_assumption_result[[index]], c(), NULL, title, texts, "bottomleft", usePercent[index])
+            }            
+        }
+    }
 }

@@ -22,7 +22,9 @@ JapaneseParameters <- function() {
         b_param = 2.5,
         minRate = 0,
         neutralRate = NeutralRateJapan,
-        legend_pos = "bottomright"
+        legend_pos = "bottomright",
+        fixed_monetary_demand_at_min_rate = TRUE,
+        max_monetary_demand_at_helicopter = FALSE
         )
     return(japanese_parameters)
 }

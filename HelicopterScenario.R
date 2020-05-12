@@ -13,7 +13,8 @@ HelicopterScenario <- function(economic_state, parameters) {
     if (G_t > 0) {
         omo_t <- G_t * economic_state$P_t
         monetary_base_t <- economic_state$monetary_base_t_minus_1 + omo_t
-    } else if (rates$i_t_T > parameters$minRate) {
+        
+    } else if (rates$i_t_T > parameters$minRate || !parameters$fixed_monetary_demand_at_min_rate) {
         ## Money demand determines M
         monetary_base_t <- (economic_state$output_Y_t * economic_state$P_t * exp(parameters$k_param - parameters$gamma_param * (rates$nominal_rate_t)))
         ## Lagged M determine open market purchases Z
