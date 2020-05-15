@@ -8,7 +8,7 @@ BondFinancedScenario <- function(economic_state, parameters) {
     G_t_star <- (economic_state$output_Y_star / parameters$delta_param * ((parameters$beta_param * (rates$real_rate_t - economic_state$neutral_rate_t))
             - parameters$lambda_param * economic_state$output_gap_Y_t))
 
-    G_t <- max(G_t_star, 0)
+    G_t <- max(parameters$goverment_stimuli_assumption * G_t_star, 0)
 
     if (rates$i_t_T > parameters$minRate || !parameters$fixed_monetary_demand_at_min_rate) {
         ## End of page 94

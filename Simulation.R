@@ -8,7 +8,7 @@ source("JapaneseParameters.R")
 source("SwedishParameters.R")
 source("RobustnessTest.R")
 
-simulation_parameters <- "Japanese"#"Swedish","Japanese"
+simulation_parameters <- "Swedish"#"Swedish","Japanese"
 
 if (simulation_parameters == "Swedish") {
      parameters <- SwedishParameters()

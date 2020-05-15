@@ -24,7 +24,7 @@ JapaneseParameters <- function() {
         neutralRate = NeutralRateJapan,
         legend_pos = "bottomright",
         fixed_monetary_demand_at_min_rate = TRUE,
-        max_monetary_demand_at_helicopter = FALSE
+        goverment_stimuli_assumption = 1.0
         )
     return(japanese_parameters)
 }
