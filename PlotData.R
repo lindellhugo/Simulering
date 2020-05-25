@@ -41,21 +41,22 @@ Plotting <- function(baseline, bond, helicopter, permanent, title, texts, legend
 }
 
 PlotData <- function(result_baseline, result_bond, result_helicopter, result_permanent, parameters) {
-        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Dept/GDP", "Transfers/GDP")
-        lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright")
-    usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Debt/GDP", "Transfers/GDP", "Real interest rate")
+        lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright", "bottomright")
+    usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
 texts <- c("Baseline", "Bond financed", "Helicopter") #, "Permanent")
-    par(mfrow = c(2, 3))
-    for (index in 1:7) {
-        if (index == 4 || index == 4 || index == 4) {
-            next
-        }
+    par(mfrow = c(3, 2))
+    for (index in 1:6) {
+        
         title <- titles[index]
         pos <- lengendpos[index]
-        Plotting(result_baseline[[index]], result_bond[[index]], result_helicopter[[index]], result_permanent[[index]], title, texts, "none", usePercent[index])
+        if (index != 1) {
+            pos <- "none"
+        }
+        Plotting(result_baseline[[index]], result_bond[[index]], result_helicopter[[index]], result_permanent[[index]], title, texts, pos, usePercent[index])
     }
 
-    for (index in 1:7) {
+    for (index in 1:8) {
         title <- titles[index]
         pos <- lengendpos[index]
         filename <- gsub("/", "_", title)

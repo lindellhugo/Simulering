@@ -122,7 +122,7 @@ RobustnessTest <- function(parameters) {
         original_assumption_result <- SimulateBaselineData(parameters, TRUE, p_assumption, comparaison_factor)
         without_assumption_result <- SimulateBaselineData(parameters, FALSE, p_assumption, comparaison_factor)
 
-        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Dept/GDP", "Transfers/GDP")
+        titles = c("Output gap", "Inflation", "Nominal interest rate", "OMO/GDP", "Monetary base/GDP", "Debt/GDP", "Transfers/GDP")
         lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright")
         usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
         texts <- c("With assumption", "Without assumption")

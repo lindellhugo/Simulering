@@ -7,8 +7,9 @@ source("PermanentExpansionScenario.R")
 source("JapaneseParameters.R")
 source("SwedishParameters.R")
 source("RobustnessTest.R")
+source("OneFile.R")
 
-simulation_parameters <- "Swedish"#"Swedish","Japanese"
+simulation_parameters <- "Japanese"#"Swedish","Japanese"
 
 if (simulation_parameters == "Swedish") {
      parameters <- SwedishParameters()
@@ -26,3 +27,4 @@ print("Plots:")
 PlotData(result_baseline, result_bond, result_helicopter, result_permanent, parameters)
 
 RobustnessTest(parameters)
+
