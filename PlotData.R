@@ -1,3 +1,7 @@
+## File:PlotData.R
+## Purpose: Plot the data for quick examination and print it to separate files for use in report.
+
+
 Plotting <- function(baseline, bond, helicopter, permanent, title, texts, legend_pos = "none", usePercent = FALSE) {
     baseline_color <- "black"
     bond_color <- "red"
@@ -45,6 +49,8 @@ PlotData <- function(result_baseline, result_bond, result_helicopter, result_per
         lengendpos = c("bottomright", "bottomleft", "topleft", "bottomright", "bottomleft", "bottomleft", "bottomright", "bottomright")
     usePercent = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
 texts <- c("Baseline", "Bond financed", "Helicopter") #, "Permanent")
+
+    # Plot some of the result curve in the R window
     par(mfrow = c(3, 2))
     for (index in 1:6) {
         
@@ -56,6 +62,7 @@ texts <- c("Baseline", "Bond financed", "Helicopter") #, "Permanent")
         Plotting(result_baseline[[index]], result_bond[[index]], result_helicopter[[index]], result_permanent[[index]], title, texts, pos, usePercent[index])
     }
 
+    # Print all result curves
     for (index in 1:8) {
         title <- titles[index]
         pos <- lengendpos[index]
@@ -68,3 +75,5 @@ texts <- c("Baseline", "Bond financed", "Helicopter") #, "Permanent")
 
     
 }
+
+## End file

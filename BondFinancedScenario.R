@@ -1,3 +1,7 @@
+## File:BondFinancedScenario.R
+## Purpose: Depicts the evolution of the bond financed scenario
+
+
 source("TaylorRule.R")
 BondFinancedScenario <- function(economic_state, parameters) {
         
@@ -11,14 +15,12 @@ BondFinancedScenario <- function(economic_state, parameters) {
     G_t <- max(parameters$goverment_stimuli_assumption * G_t_star, 0)
 
     if (rates$i_t_T > parameters$minRate || !parameters$fixed_monetary_demand_at_min_rate) {
-        ## End of page 94
         ## Money demand determines M
         monetary_base_t <- (economic_state$output_Y_t * economic_state$P_t * exp(parameters$k_param - parameters$gamma_param * (rates$nominal_rate_t)))
         ## Lagged M determine open market purchases Z
         omo_t <- (monetary_base_t - economic_state$monetary_base_t_minus_1)
     }
     else {
-        ## Case of i_t == 0
         monetary_base_t <- economic_state$monetary_base_t_minus_1
         omo_t <- economic_state$omo_t_minus_1
     }
@@ -33,3 +35,5 @@ BondFinancedScenario <- function(economic_state, parameters) {
 
     return(policy)
 }
+
+## End File

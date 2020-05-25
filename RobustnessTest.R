@@ -1,3 +1,6 @@
+## File:RobustnessTest.R
+## Purpose: Perform the various robustness test in the discussion
+
 source("PlotData.R")
 source("BaseModel.R")
 source("BaselineScenario.R")
@@ -136,3 +139,5 @@ RobustnessTest <- function(parameters) {
         }
     }
 }
+
+## End File

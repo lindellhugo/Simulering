@@ -1,3 +1,6 @@
+## File:HelicopterScenario.R
+## Purpose: Depicts the evolution of the helicopter scenario
+
 source("TaylorRule.R")
 HelicopterScenario <- function(economic_state, parameters) {
 
@@ -21,7 +24,6 @@ HelicopterScenario <- function(economic_state, parameters) {
         omo_t <- (monetary_base_t - economic_state$monetary_base_t_minus_1)
     }
     else {
-        ## Case of i_t == 0
         monetary_base_t <- economic_state$monetary_base_t_minus_1
         omo_t <- economic_state$omo_t_minus_1
     }  
@@ -36,3 +38,5 @@ HelicopterScenario <- function(economic_state, parameters) {
 
     return(policy)
 }
+
+## End File

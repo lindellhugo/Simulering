@@ -1,0 +1,1 @@
+copy  Simulation.R + m.txt+ BaseModel.R + m.txt + TaylorRule.R + m.txt + BaselineScenario.R + m.txt + BondFinancedScenario.R + m.txt + HelicopterScenario.R + m.txt + SwedishParameters.R + m.txt + JapaneseParameters.R  + m.txt + RobustnessTest.R  + m.txt + PlotData.R all.txt

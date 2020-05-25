@@ -1,3 +1,7 @@
+## File:BaselineScenario.R
+## Purpose: Depicts the evolution of the baseline scenario
+
+
 source("TaylorRule.R")
 BaselineScenario <- function(economic_state,parameters) {
 
@@ -9,7 +13,6 @@ BaselineScenario <- function(economic_state,parameters) {
         economic_state$output_gap_Y_t, parameters$inflation_target, parameters$minRate)
 
     if (rates$i_t_T > parameters$minRate || !parameters$fixed_monetary_demand_at_min_rate) {
-        ## End of page 94
         ## Money demand determines M
         monetary_base_t <- (economic_state$output_Y_t * economic_state$P_t * exp(parameters$k_param - parameters$gamma_param * (rates$nominal_rate_t)))
         ## Lagged M determine open market purchases Z
@@ -30,5 +33,7 @@ BaselineScenario <- function(economic_state,parameters) {
 
     return(policy)
 }
+
+## End File
 
 

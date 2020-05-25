@@ -1,10 +1,12 @@
-source("NeutralRateSweden.R")
+## File:SwedishParameters.R
+## Purpose: Parameters for the Swedish economy
+
 SwedishParameters <- function() {
     swedish_parameters <- list(
         number_of_steps = 15,
         alpha_param = 0.3, ## Philips kurvan
         beta_param = 1, ##
-        delta_param = 1.3, ## Kuttner and Posen 2001
+        delta_param = 1.3,
         gamma_param = 0.122, #0.122,
         lambda_param = 0.9,
         theta_param = 0.45,
@@ -30,3 +32,5 @@ SwedishParameters <- function() {
         )
     return(swedish_parameters)
 }
+
+# End File

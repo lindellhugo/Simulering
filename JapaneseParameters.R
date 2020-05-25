@@ -1,4 +1,15 @@
-source("NeutralRateJapan.R")
+## File:JapaneseParameters.R
+## Purpose: Parameters for the Japanese economy
+
+NeutralRateJapan <- function(state)
+{
+  
+    if (state$time_period < 11)
+    return(- 0.02 + (0.04 / 10 * (state$time_period-1)))
+  else
+    return(0.02)
+}
+
 JapaneseParameters <- function() {
     japanese_parameters <- list(
         number_of_steps = 25,
@@ -28,3 +39,5 @@ JapaneseParameters <- function() {
         )
     return(japanese_parameters)
 }
+
+## End File

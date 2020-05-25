@@ -1,3 +1,6 @@
+## File:BaseModel.R
+## Purpose: The base model dictating the evolution on the economy based on the parameters and used scenario
+
 BaseModel <- function(parameters, scenario) {
 
     print("BaseModel")
@@ -172,3 +175,5 @@ BaseModel <- function(parameters, scenario) {
     result <- list(output_gap_percent_list, inflation_percent_list, nominal_interest_rate_list, omo_per_gdp_list, monetary_base_per_gdp_list, dept_per_gdp_list, G_t_per_gdp_list, real_rate_list)
     return(result)
 }
+
+## End File
